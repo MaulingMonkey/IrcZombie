@@ -24,8 +24,6 @@ namespace IrcZombie {
 			if ( Connection != null && Connection.Socket.Connected ) {
 				var pipe = new AnonymousPipeServerStream( PipeDirection.Out, HandleInheritability.Inheritable );
 				var pipename = pipe.GetClientHandleAsString();
-				//Console.WriteLine( "Pipe Name: {0}", pipename );
-				//Console.ReadKey();
 				var pcloneinfo = new ProcessStartInfo( newexe, string.Format( "--original={0} --pipe={1}", OriginalPath, pipename ) );
 				pcloneinfo.UseShellExecute = false;
 				var pclone = Process.Start(pcloneinfo);
@@ -50,12 +48,15 @@ namespace IrcZombie {
 			OriginalPath = args.First(arg=>arg.StartsWith("--original=")).Remove(0,"--original=".Length);
 			if (args.Any(arg=>arg.StartsWith("--pipe="))) {
 				var pipename = args.First(arg=>arg.StartsWith("--pipe=")).Remove(0,"--pipe=".Length);
-				//Console.WriteLine( "Pipe Name: {0}", pipename );
-				//Console.ReadKey();
 				var pipe   = new AnonymousPipeClientStream(pipename);
 				var buffer = new byte[9001];
-				var length = pipe.Read(buffer,0,buffer.Length);
-				Debug.Assert(pipe.IsMessageComplete);
+
+				int read=0, length=0;
+				do {
+					read = pipe.Read(buffer,length,buffer.Length-length);
+					length += read;
+				} while ( read!=0 );
+
 				var si = new SocketInformation()
 					{ Options = SocketInformationOptions.Connected | SocketInformationOptions.UseOnlyOverlappedIO
 					, ProtocolInformation = buffer.Take(length).ToArray()
