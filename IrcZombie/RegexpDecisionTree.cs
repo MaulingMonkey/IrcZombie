@@ -26,27 +26,27 @@ namespace IrcZombie {
 		}
 		public void Add( string regexp, Action<O,string>                                action ) {
 			var r=new Regex(regexp,RegexOptions);
-			Debug.Assert(r.GetGroupNumbers().Length==1);
+			Debug.Assert(r.GetGroupNumbers().Length==2);
 			Add(new Entry(){Regex=r,OnMatch=(o,m)=>action(o,m.Groups[1].Value)});
 		}
 		public void Add( string regexp, Action<O,string,string>                         action ) {
 			var r=new Regex(regexp,RegexOptions);
-			Debug.Assert(r.GetGroupNumbers().Length==2);
+			Debug.Assert(r.GetGroupNumbers().Length==3);
 			Add(new Entry(){Regex=r,OnMatch=(o,m)=>action(o,m.Groups[1].Value,m.Groups[2].Value)});
 		}
 		public void Add( string regexp, Action<O,string,string,string>                  action ) {
 			var r=new Regex(regexp,RegexOptions);
-			Debug.Assert(r.GetGroupNumbers().Length==3);
+			Debug.Assert(r.GetGroupNumbers().Length==4);
 			Add(new Entry(){Regex=r,OnMatch=(o,m)=>action(o,m.Groups[1].Value,m.Groups[2].Value,m.Groups[3].Value)});
 		}
 		public void Add( string regexp, ExtAction<O,string,string,string,string>        action ) {
 			var r=new Regex(regexp,RegexOptions);
-			Debug.Assert(r.GetGroupNumbers().Length==4);
+			Debug.Assert(r.GetGroupNumbers().Length==5);
 			Add(new Entry(){Regex=r,OnMatch=(o,m)=>action(o,m.Groups[1].Value,m.Groups[2].Value,m.Groups[3].Value,m.Groups[4].Value)});
 		}
 		public void Add( string regexp, ExtAction<O,string,string,string,string,string> action ) {
 			var r=new Regex(regexp,RegexOptions);
-			Debug.Assert(r.GetGroupNumbers().Length==5);
+			Debug.Assert(r.GetGroupNumbers().Length==6);
 			Add(new Entry(){Regex=r,OnMatch=(o,m)=>action(o,m.Groups[1].Value,m.Groups[2].Value,m.Groups[3].Value,m.Groups[4].Value,m.Groups[5].Value)});
 		}
 
