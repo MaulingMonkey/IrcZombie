@@ -40,7 +40,6 @@ namespace IrcZombie {
 
 		static void Main( string[] args ) {
 			Console.WriteLine("PID {0}", Process.GetCurrentProcess().Id );
-#if !DEBUG
 			if (!args.Any(arg=>arg.StartsWith("--original="))) { // Assume we're the original process
 				OriginalPath = Assembly.GetExecutingAssembly().GetName().CodeBase;
 				// Relaunch and quit so that we don't lock the original executable:
@@ -65,9 +64,6 @@ namespace IrcZombie {
 			} else {
 				Connection = new IrcConnection( "irc.afternet.org", 6667 );
 			}
-#else
-			Connection = new IrcConnection( "irc.afternet.org", 6667 );
-#endif
 
 			Connection.BeginPumping();
 			Connection.WaitPumping();
