@@ -20,12 +20,9 @@ namespace IrcZombie {
 		public void On( PrivMsgEvent  e ) {
 			var a = e.Message.Split(new[]{' '},StringSplitOptions.RemoveEmptyEntries);
 
-			Console.WriteLine("A[{0}]",String.Join(",",a));
-
 			foreach ( var chan in e.AffectedChannels ) {
 				switch (a[0]) {
 				case "!restart":
-					Console.WriteLine("!restart");
 					Program.RequestRelaunch();
 					e.Connection.StopPumping();
 					break;

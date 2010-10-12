@@ -103,7 +103,6 @@ namespace IrcZombie {
 				var c1 = GetChannelInfo(a[0]);
 				if (a[1].StartsWith(":")) a[1] = a[1].Remove(0,1);
 
-				Console.WriteLine("RPL_NAMREPLY:  Channel: {0}  Nicks: [{1}]", a[0], String.Join(",",a.Skip(1)) );
 				foreach ( var name in a.Skip(1) ) {
 					if ( name.Length>0 ) switch ( name[0] ) {
 					case '@': c1.People.Add( new ChannelInfo.Person() { Sigil="@", NUH=new NUH(){Nick=name.Substring(1)} } ); break;
