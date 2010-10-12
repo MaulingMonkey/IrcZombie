@@ -7,10 +7,61 @@ using System.Net.Sockets;
 using System.Reflection;
 
 namespace IrcZombie {
-	class Program {
-		static          string OriginalPath;
+	class CommandResponder : IIrcConnectionListener {
+		public IrcConnectionState State;
 
+		public void Before( CommandEvent e ) {}
+		public void After(  CommandEvent e ) {}
+		public void On( NickEvent     e ) {}
+		public void On( JoinEvent     e ) {}
+		public void On( PartEvent     e ) {}
+		public void On( QuitEvent     e ) {}
+		public void On( KickEvent     e ) {}
+		public void On( PrivMsgEvent  e ) {
+			var a = e.Message.Split(new[]{' '},StringSplitOptions.RemoveEmptyEntries);
+
+			Console.WriteLine("A[{0}]",String.Join(",",a));
+
+			foreach ( var chan in e.AffectedChannels ) {
+				switch (a[0]) {
+				case "!restart":
+					Console.WriteLine("!restart");
+					Program.RequestRelaunch();
+					e.Connection.StopPumping();
+					break;
+				case "!quit":
+					e.Connection.Send("QUIT");
+					e.Connection.StopPumping();
+					break;
+				case "!info":
+					if (State==null) {
+						e.Connection.Send("NOTICE "+chan+" :No state, I'm senile!");
+					} else {
+						var info = State.GetChannelInfo(chan);
+						if (!info.Joined) e.Connection.Send("NOTICE "+chan+" :What?  I'm in this channel?!?");
+						else              e.Connection.Send("NOTICE "+chan+" :Topic: "+(info.Topic??"N/A")+"   People: "+string.Join(", ",info.People.Select(p=>p.NUH.Nick)));
+					}
+					break;
+				case "!join":
+					e.Connection.Send("JOIN "+a[1]);
+					break;
+				}
+			}
+		}
+		public void On( NoticeEvent   e ) {}
+		public void On( ModeEvent     e ) {}
+		public void On( TopicEvent    e ) {}
+		public void On( ResponseEvent e ) {}
+	}
+
+	class Program {
+		static        string OriginalPath;
 		static IrcConnection Connection;
+
+		static bool RelaunchFlag = false;
+		public static void RequestRelaunch() {
+			RelaunchFlag = true;
+		}
 
 		static void Relaunch() {
 			var tempdir = Path.Combine( Path.GetTempPath(), Path.GetRandomFileName() );
@@ -66,9 +117,10 @@ namespace IrcZombie {
 				Connection = new IrcConnection( "irc.afternet.org", 6667 );
 			}
 
+			Connection.Listeners.Add(new CommandResponder(){State=Connection.Listeners[0] as IrcConnectionState});
 			Connection.BeginPumping();
 			Connection.WaitPumping();
-			if ( Connection.RequestRestart ) Relaunch();
+			if ( RelaunchFlag ) Relaunch();
 		}
 	}
 }

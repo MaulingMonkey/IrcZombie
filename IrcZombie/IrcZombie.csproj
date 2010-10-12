@@ -44,7 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Codes.cs" />
-    <Compile Include="IrcChannel.cs" />
+    <Compile Include="Events.cs" />
+    <Compile Include="Extension Methods\System.String.cs" />
     <Compile Include="IrcConnection.cs" />
     <Compile Include="NUH.cs" />
     <Compile Include="Program.cs" />
