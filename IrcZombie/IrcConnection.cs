@@ -214,15 +214,15 @@ namespace IrcZombie {
 				Func<int,string> skip = off => parameters.Substring(off).TrimStart1(' ').TrimStart1(':');
 
 				switch (action) {
-				case "NICK":    { var e=new NickEvent()    { Connection=connection, Who=nuh, NewNickname=parameters.TrimStart1(':')                                                }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "JOIN":    { var e=new JoinEvent()    { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(parameters.TrimStart1(":").Split(','))           }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "PART":    { var e=new PartEvent()    { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(parameters.TrimStart1(":").Split(','))           }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "QUIT":    { var e=new QuitEvent()    { Connection=connection, Who=nuh, Message=parameters.TrimStart1(':')                                                    }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "KICK":    { var e=new KickEvent()    { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, Kicked=p[1], Message=skip(p[0].Length)  }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "PRIVMSG": { var e=new PrivMsgEvent() { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, Message =skip(p[0].Length)              }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "NOTICE":  { var e=new NoticeEvent()  { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, Message =skip(p[0].Length)              }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "MODE":    { var e=new ModeEvent()    { Connection=connection, Who=nuh                                                                                        }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
-				case "TOPIC":   { var e=new TopicEvent()   { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, NewTopic=skip(p[0].Length)              }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); } } break;
+				case "NICK":    { var e=new NickEvent()    { Connection=connection, Who=nuh, NewNickname=parameters.TrimStart1(':')                                                }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "JOIN":    { var e=new JoinEvent()    { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(parameters.TrimStart1(":").Split(','))           }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "PART":    { var e=new PartEvent()    { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(parameters.TrimStart1(":").Split(','))           }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "QUIT":    { var e=new QuitEvent()    { Connection=connection, Who=nuh, Message=parameters.TrimStart1(':')                                                    }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "KICK":    { var e=new KickEvent()    { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, Kicked=p[1], Message=skip(p[0].Length)  }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "PRIVMSG": { var e=new PrivMsgEvent() { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, Message =skip(p[0].Length)              }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "NOTICE":  { var e=new NoticeEvent()  { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, Message =skip(p[0].Length)              }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "MODE":    { var e=new ModeEvent()    { Connection=connection, Who=nuh                                                                                        }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "TOPIC":   { var e=new TopicEvent()   { Connection=connection, Who=nuh, AffectedChannels=new HashSet<string>(){p[0]}, NewTopic=skip(p[0].Length)              }; foreach ( var l in connection.Listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
 				default:        break;
 				}
 			}}};
