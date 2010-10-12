@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Reflection;
 
 namespace IrcZombie {
-	class CommandResponder : IIrcConnectionListener {
+	class CommandResponder : IIrcListener {
 		public IrcConnectionState State;
 
 		public void Before( CommandEvent e ) {}

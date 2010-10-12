@@ -46,7 +46,10 @@
     <Compile Include="Codes.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Extension Methods\System.String.cs" />
+    <Compile Include="IIrcListener.cs" />
     <Compile Include="IrcConnection.cs" />
+    <Compile Include="IrcConnectionHistory.cs" />
+    <Compile Include="IrcConnectionState.cs" />
     <Compile Include="NUH.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
