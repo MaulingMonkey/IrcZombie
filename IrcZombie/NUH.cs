@@ -15,5 +15,7 @@ namespace IrcZombie {
 				, Host = original.Substring(ex+1)
 				};
 		}
+
+		public override string ToString() { return String.Format("{0}!{1}@{2}",Nick,User,Host); }
 	}
 }

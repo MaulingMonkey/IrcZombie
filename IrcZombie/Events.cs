@@ -17,6 +17,7 @@ namespace IrcZombie {
 	class NoticeEvent  : CommandEvent { public string Message; }
 	class ModeEvent    : CommandEvent {}
 	class TopicEvent   : CommandEvent { public string NewTopic; }
+	class InviteEvent  : CommandEvent { public string Invited; }
 	class ResponseEvent : Event {
 		public string Server;
 		public string Code;

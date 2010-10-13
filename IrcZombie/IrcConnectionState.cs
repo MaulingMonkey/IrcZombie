@@ -72,6 +72,7 @@ namespace IrcZombie {
 		public void On( NoticeEvent   e ) {}
 		public void On( ModeEvent     e ) {}
 		public void On( TopicEvent    e ) { foreach ( var channel in e.AffectedChannels ) GetChannelInfo(channel).Topic = e.NewTopic; }
+		public void On( InviteEvent   e ) {}
 
 		public void On( ResponseEvent e ) {
 			if ( e.Code != ERR.NicknameInUse && e.YourNick != "*" ) { // The check against "*" is just paranoia -- it's what AfterNET uses on 433/NicknameInUse replies if our first NICK is in use, since we don't have a nick at that point, herp derp.

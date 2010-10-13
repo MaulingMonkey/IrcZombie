@@ -38,6 +38,7 @@ namespace IrcZombie {
 
 		public void Send( string message ) {
 			Socket.Send( Encoding.UTF8.GetBytes(message+"\r\n") );
+			Thread.Sleep(1000);
 		}
 
 		Thread Pump;
@@ -58,8 +59,7 @@ namespace IrcZombie {
 			,	{ @"^\:?([^ ]+) (\d\d\d) ([^: ]+) \:?(.*)$", (connection,server,code,target,arguments) => {
 				switch (code) {
 				case RPL.Welcome:
-					connection.Send("JOIN #sparta");
-					connection.Send("JOIN #sparta2");
+					connection.Send("JOIN #sparta,#sparta2");
 					break;
 				case ERR.NicknameInUse:
 					connection.Send("NICK IrcZombie"+RNG.Next(0,9999).ToString().PadLeft(4,'0'));
@@ -89,6 +89,7 @@ namespace IrcZombie {
 				case "NOTICE":  { var e=new NoticeEvent()  { AffectedChannels=new HashSet<string>(){p[0]}, Message =skip(p[0].Length)                            }; inject(e); foreach ( var l in listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
 				case "MODE":    { var e=new ModeEvent()    {                                                                                                     }; inject(e); foreach ( var l in listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
 				case "TOPIC":   { var e=new TopicEvent()   { AffectedChannels=new HashSet<string>(){p[0]}, NewTopic=skip(p[0].Length)                            }; inject(e); foreach ( var l in listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
+				case "INVITE":  { var e=new InviteEvent()  { AffectedChannels=new HashSet<string>(){p[1].TrimStart1(":")}, Invited=p[0]                          }; inject(e); foreach ( var l in listeners ) { l.Before(e); l.On(e); l.After(e); } } break;
 				default:        break;
 				}
 			}}};

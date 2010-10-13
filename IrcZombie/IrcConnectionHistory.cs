@@ -16,6 +16,7 @@ namespace IrcZombie {
 		public void On( NoticeEvent   e ) {}
 		public void On( ModeEvent     e ) {}
 		public void On( TopicEvent    e ) {}
+		public void On( InviteEvent   e ) {}
 		public void On( ResponseEvent e ) {}
 	}
 }

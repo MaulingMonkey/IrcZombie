@@ -12,6 +12,7 @@ namespace IrcZombie {
 		void On( NoticeEvent   e );
 		void On( ModeEvent     e );
 		void On( TopicEvent    e );
+		void On( InviteEvent   e );
 		void On( ResponseEvent e );
 	}
 }

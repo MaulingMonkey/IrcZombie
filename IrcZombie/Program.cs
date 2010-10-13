@@ -5,6 +5,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace IrcZombie {
 	class CommandResponder : IIrcListener {
@@ -48,6 +49,12 @@ namespace IrcZombie {
 		public void On( NoticeEvent   e ) {}
 		public void On( ModeEvent     e ) {}
 		public void On( TopicEvent    e ) {}
+		public void On( InviteEvent   e ) {
+			foreach ( var chan in e.AffectedChannels ) {
+				e.Connection.Send("JOIN "+chan);
+				e.Connection.Send("NOTICE "+chan+" :Invited by "+e.Who.ToString());
+			}
+		}
 		public void On( ResponseEvent e ) {}
 	}
 
@@ -85,7 +92,11 @@ namespace IrcZombie {
 		}
 
 		static void Main( string[] args ) {
-			Console.WriteLine("PID {0}", Process.GetCurrentProcess().Id );
+#if DEBUG
+			Console.WriteLine("PID {0} Debug", Process.GetCurrentProcess().Id );
+#else
+			Console.WriteLine("PID {0} Release", Process.GetCurrentProcess().Id );
+#endif
 			if (!args.Any(arg=>arg.StartsWith("--original="))) { // Assume we're the original process
 				OriginalPath = Assembly.GetExecutingAssembly().GetName().CodeBase;
 				// Relaunch and quit so that we don't lock the original executable:
